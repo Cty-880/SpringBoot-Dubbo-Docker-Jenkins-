@@ -79,9 +79,8 @@ public class UserControllerImpl implements UserController {
 
         // 将 SessionID-UserEntity 从Redis中移除
         // TODO 暂时存储本地
-//        redisService.set(sessionID, userEntity, sessionExpireTime);
-        RedisServiceTemp.userMap.remove(sessionID);
-
+          redisService.remove(sessionID);
+//        RedisServiceTemp.userMap.remove(sessionID);
         // 将SessionID从HTTP响应头中删除
         Cookie cookie = new Cookie(sessionIdName, null);
         httpRsp.addCookie(cookie);
@@ -250,8 +249,8 @@ public class UserControllerImpl implements UserController {
 
         // 将 SessionID-UserEntity 存入Redis
         // TODO 暂时存储本地
-//        redisService.set(sessionID, userEntity, sessionExpireTime);
-        RedisServiceTemp.userMap.put(sessionID, userEntity);
+       redisService.set(sessionID, userEntity, sessionExpireTime);
+//        RedisServiceTemp.userMap.put(sessionID, userEntity);
 
         // 将SessionID存入HTTP响应头
         Cookie cookie = new Cookie(sessionIdName, sessionID);
@@ -293,8 +292,8 @@ public class UserControllerImpl implements UserController {
 
         // 获取UserEntity
         // TODO 暂时存储本地
-//        Object userEntity = redisService.get(sessionID);
-        Object userEntity = RedisServiceTemp.userMap.get(sessionID);
+        Object userEntity = redisService.get(sessionID);
+//        Object userEntity = RedisServiceTemp.userMap.get(sessionID);
         if (userEntity==null) {
             return null;
         }
